@@ -9,105 +9,108 @@
     tools:context=".fragment.MyFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <RelativeLayout
-        android:id="@+id/rl_index"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.0">
-        <ImageView
-            android:id="@+id/index_button"
-            android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+
+        >
+
+
+        <RelativeLayout
+            android:id="@+id/rl_think"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/index_page"
-            android:layout_centerHorizontal="true"/>
-        <TextView
-            android:id="@+id/index_text"
-            android:layout_width="wrap_content"
+            android:layout_weight="1.0"
+            >
+
+            <TextView
+                android:id="@+id/think_text_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="0"
+                android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/think_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/think_text_num"
+                android:layout_centerHorizontal="true"
+                android:text="我的创作"
+                android:textColor="@color/grey1"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_university"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/index_button"
-            android:layout_centerHorizontal="true"
-            android:text="首"
-            android:textColor="@color/grey1"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/rl_think"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.0">
-        <ImageView
-            android:id="@+id/think_button"
-            android:layout_width="wrap_content"
+            android:layout_weight="1.0">
+            <TextView
+                android:id="@+id/university_text_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="0"
+                android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/university_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/university_text_num"
+                android:layout_centerHorizontal="true"
+                android:text="关注"
+                android:textColor="@color/grey1"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_noti"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/think"
-            android:layout_centerHorizontal="true"/>
-        <TextView
-            android:id="@+id/think_text"
-            android:layout_width="wrap_content"
+            android:layout_weight="1.0">
+            <TextView
+                android:id="@+id/noti_text_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="0"
+                android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/noti_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/noti_text_num"
+                android:layout_centerHorizontal="true"
+                android:text="收藏夹"
+                android:textColor="@color/grey1"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_my"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/think_button"
-            android:layout_centerHorizontal="true"
-            android:text="想"
-            android:textColor="@color/grey1"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/rl_university"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.0">
-        <ImageView
-            android:id="@+id/university_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/university"
-            android:layout_centerHorizontal="true"/>
-        <TextView
-            android:id="@+id/university_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/university_button"
-            android:layout_centerHorizontal="true"
-            android:text="学"
-            android:textColor="@color/grey1"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/rl_noti"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.0">
-        <ImageView
-            android:id="@+id/noti_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/notification"
-            android:layout_centerHorizontal="true"/>
-        <TextView
-            android:id="@+id/noti_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/noti_button"
-            android:layout_centerHorizontal="true"
-            android:text="通"
-            android:textColor="@color/grey1"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/rl_my"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.0">
-        <ImageView
-            android:id="@+id/my_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/my"
-            android:layout_centerHorizontal="true"/>
-        <TextView
-            android:id="@+id/my_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/my_button"
-            android:layout_centerHorizontal="true"
-            android:text="我的"
-            android:textColor="@color/grey1"/>
-    </RelativeLayout>
+            android:layout_weight="1.0">
+            <TextView
+                android:id="@+id/wrap_content_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="0"
+                android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/my_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/wrap_content_num"
+                android:layout_centerHorizontal="true"
+                android:text="最近浏览"
+                android:textColor="@color/grey1"/>
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
 
 </LinearLayout>

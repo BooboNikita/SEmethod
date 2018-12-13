@@ -6,6 +6,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -44,6 +45,9 @@ public interface Request_Interface {
     // 获取问题列表（问题信息中包含对应回答列表）
     @GET("api/v1/questions/")
     Call<String> getQuestions();
+
+    @GET("api/v1/questions/{id}")
+    Call<String> getQuestionsinID(@Path("id") String ID);
 
     // 获取搜索问题列表（问题信息中包含对应回答列表）
     @GET("api/v1/questions/")

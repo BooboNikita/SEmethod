@@ -28,14 +28,19 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 android:gravity="center_vertical">
                 <TextView
+                    android:id="@+id/answerpage_quesion_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="20dp"
+                    android:textColor="@color/black"
                     android:text="问题"/>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical">
                     <Button
+                        android:id="@+id/answerpage_writeanswer_btn"
                         android:layout_width="60dp"
                         android:layout_height="40dp"
                         android:background="@drawable/shape_grey_coner"
@@ -44,6 +49,7 @@
                         android:layout_marginLeft="10dp"
                         android:text="写回答"/>
                     <TextView
+                        android:id="@+id/answerpage_scan_answer_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -65,10 +71,13 @@
                     android:visibility="invisible"
                     android:src="@drawable/back"/>
                 <TextView
+                    android:id="@+id/answerpage_quesion_toolbar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:visibility="invisible"
+                    android:textSize="20dp"
+                    android:textColor="@color/black"
                     android:text="问题"/>
 
             </android.support.v7.widget.Toolbar>
@@ -81,6 +90,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <TextView
+            android:id="@+id/answerpage_answer_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="回答"/>

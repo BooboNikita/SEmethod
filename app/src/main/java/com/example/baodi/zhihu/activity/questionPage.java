@@ -1,14 +1,18 @@
 package com.example.baodi.zhihu.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.IntRange;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
@@ -19,13 +23,17 @@ import com.example.baodi.zhihu.SomeClass.Answer;
 import com.example.baodi.zhihu.SomeClass.Question;
 import com.example.baodi.zhihu.R;
 import com.example.baodi.zhihu.Request_Interface;
+import com.example.baodi.zhihu.SomeClass.Topic;
 import com.example.baodi.zhihu.SomeClass.User;
+import com.example.baodi.zhihu.UnScrollListView;
+import com.example.baodi.zhihu.MyScrollView;
 import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +50,10 @@ public class questionPage extends AppCompatActivity {
     private TextView question_text,question_description,questionpage_follow_number,
             questionpage_question_comment_number, questionpage_answer_number;
     private TextView list_item_authorname,list_item_answer;
-    private ListView answer_list;
+    private UnScrollListView answer_list;
+    private MyScrollView mScrollView;
     private List<Answer> answerList;
+    private List<Integer> answerID_list;
     private int questionId;
     private Question question;
     private BaseAdapter adapter;
@@ -54,6 +64,7 @@ public class questionPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question_page);
         answerList = new ArrayList<>();
+        answerID_list = new ArrayList<>();
         update_Info();
 
         handler = new Handler(){
@@ -61,7 +72,7 @@ public class questionPage extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 if(msg.what == 1){
 //                    Log.d("numberlist", String.valueOf(tmp.answer_number));
-                    Log.d("numberoflist", String.valueOf(answerList.size()));
+
                     for(int i=0;i<answerList.size();i++){
                         Answer tmp = answerList.get(i);
                         Log.d("title",tmp.answerContent);
@@ -80,7 +91,19 @@ public class questionPage extends AppCompatActivity {
         questionpage_follow_number = (TextView) findViewById(R.id.questionpage_follow_number);
 //        questionpage_question_comment_number = (TextView) findViewById(R.id.questionpage_question_comment_number);
         questionpage_answer_number = (TextView) findViewById(R.id.questionpage_answer_number);
-        answer_list = (ListView) findViewById(R.id.questionpage_answer_list);
+        answer_list = (UnScrollListView) findViewById(R.id.questionpage_answer_list);
+
+
+
+        final LayoutInflater inflater = LayoutInflater.from(this);
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.questionpage_tag_tab);
+        TextView topic_text = (TextView) inflater.inflate(R.layout.questionpage_topic_tag,null).findViewById(R.id.questionpage_topic_tag);
+        topic_text.setText(question.topic_tag.text);
+
+        linearLayout.addView(topic_text);
+
+
+        answer_list.setFocusable(false);
 
 
 
@@ -91,6 +114,7 @@ public class questionPage extends AppCompatActivity {
         adapter = new BaseAdapter() {
             @Override
             public int getCount() {
+                Log.d("numberoflist", String.valueOf(answerList.size()));
                 return answerList.size();
             }
 
@@ -113,7 +137,7 @@ public class questionPage extends AppCompatActivity {
                 }
                 else {
                     v = view;
-                    Log.i("info","有缓存，不需要重新生成"+i);
+                    Log.d("info","有缓存，不需要重新生成"+i);
                 }
                 list_item_authorname = (TextView) v.findViewById(R.id.questionpage_author_name);
                 list_item_answer = (TextView) v.findViewById(R.id.questionpage_answer_content);
@@ -123,11 +147,22 @@ public class questionPage extends AppCompatActivity {
                 list_item_answer.setText(tmp.answerContent);
 
                 return v;
-
-
             }
         };
         answer_list.setAdapter(adapter);
+        answer_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Bundle bundle = new Bundle();
+                Answer tmp = (Answer) answerList.get(i);
+                bundle.putInt("answerID",tmp.answerID);
+                bundle.putSerializable("answer_list", (Serializable) answerID_list);
+                Intent intent = new Intent();
+                intent.putExtras(bundle);
+                intent.setClass(questionPage.this,answerPage.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void update_Info() {
@@ -150,7 +185,7 @@ public class questionPage extends AppCompatActivity {
                 public void onResponse(Call call, Response response) {
                     if (response.isSuccessful()) {
                         String responseBodyString = response.body().toString();
-//                        Log.d("Response body", responseBodyString);
+                        Log.d("Response body", responseBodyString);
                         try {
                             JSONObject json = new JSONObject(responseBodyString);
                             question = new Question();
@@ -160,7 +195,8 @@ public class questionPage extends AppCompatActivity {
                             question.quesDescription = json.get("body").toString();
                             question.answer_number = Integer.parseInt(json.get("answers_count").toString());
                             question.follow_number = Integer.parseInt(json.get("flows").toString());
-//                            tmp.topic_tag = json.get("topic_name").toString();
+                            question.topic_tag = new Topic();
+                            question.topic_tag.text = json.get("topic_name").toString();
                             if (question.answer_number != 0) {
                                 getAnswer(json);
                                 Message msg = new Message();
@@ -192,6 +228,7 @@ public class questionPage extends AppCompatActivity {
                 JSONObject jsonObject = jsonArray.getJSONObject(j);
                 Answer ans = new Answer();
                 ans.answerID = Integer.parseInt(jsonObject.get("id").toString());
+                answerID_list.add(ans.answerID);
                 ans.quesID = Integer.parseInt(jsonObject.get("question_id").toString());
                 ans.quesContent = jsonObject.get("question_title").toString();
                 ans.author_name = jsonObject.get("author_name").toString();

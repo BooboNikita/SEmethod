@@ -40,14 +40,18 @@
                 android:layout_toLeftOf="@id/questionpage_share_btn"
                 android:layout_toRightOf="@id/questionpage_back_btn"
                 android:layout_height="wrap_content"
+                android:hint="搜索知乎内容"
                 android:background="@null"/>
 
         </RelativeLayout>
     </LinearLayout>
 
-    <ScrollView
+    <com.example.baodi.zhihu.MyScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -56,11 +60,13 @@
                 android:id="@+id/questionpage_tag_tab"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
                 android:orientation="horizontal">
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/question_text"
@@ -121,6 +127,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="邀请回答"
+                            android:textColor="@color/black"
                             android:layout_centerHorizontal="true"/>
                     </RelativeLayout>
                     <LinearLayout
@@ -138,6 +145,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="添加回答"
+                            android:textColor="@color/black"
                             android:layout_centerHorizontal="true"/>
                     </RelativeLayout>
                 </LinearLayout>
@@ -152,14 +160,14 @@
                         android:text="....个回答"
                         android:layout_marginLeft="10dp"/>
                 </LinearLayout>
-                <ListView
+                <com.example.baodi.zhihu.UnScrollListView
                     android:id="@+id/questionpage_answer_list"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"></ListView>
+                    android:layout_height="match_parent"></com.example.baodi.zhihu.UnScrollListView>
             </LinearLayout>
         </LinearLayout>
 
-    </ScrollView>
+    </com.example.baodi.zhihu.MyScrollView>
     
 
 

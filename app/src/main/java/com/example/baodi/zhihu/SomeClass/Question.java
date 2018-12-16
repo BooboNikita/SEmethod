@@ -8,7 +8,7 @@ public class Question {
     public String title;
     public  String quesDescription;
     public boolean anonymity;
-    public List<Topic> topic_tag;
+    public Topic topic_tag;
     public int comment_number;
     public List<Comment> comment_list;
     public int follow_number;

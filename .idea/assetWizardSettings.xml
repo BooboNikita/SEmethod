@@ -56,7 +56,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_filter_vintage_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/social/ic_public_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -66,10 +66,10 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="backgroundColor" value="ec3c64" />
+                                      <entry key="backgroundColor" value="1bbcf8" />
                                       <entry key="cropped" value="true" />
                                       <entry key="iconShape" value="CIRCLE" />
-                                      <entry key="outputName" value="noti5" />
+                                      <entry key="outputName" value="ic_my_playground" />
                                     </map>
                                   </option>
                                 </PersistentState>

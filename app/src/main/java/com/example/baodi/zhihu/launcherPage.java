@@ -9,7 +9,9 @@ import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
+
+import com.example.baodi.zhihu.activity.LoginActivity;
+import com.example.baodi.zhihu.activity.LogupActivity;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.

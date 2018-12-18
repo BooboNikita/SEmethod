@@ -4,11 +4,15 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.baodi.zhihu.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +31,17 @@ public class focus extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private JSONObject String2Json(String str) {
+        try {
+            JSONObject json = new JSONObject(str);
+            Log.d("json", json.getString("token"));
+            return json;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     private OnFragmentInteractionListener mListener;
 
@@ -65,7 +80,7 @@ public class focus extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_focus, container, false);
+        return inflater.inflate(R.layout.fragment_collect, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

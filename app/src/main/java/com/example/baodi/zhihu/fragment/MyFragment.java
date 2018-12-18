@@ -1,24 +1,16 @@
 package com.example.baodi.zhihu.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.example.baodi.zhihu.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MyFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MyFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class MyFragment extends Fragment {
+
+public class MyFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -58,6 +50,18 @@ public class MyFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        if (savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.container, new MyFragment())
+                    .commit();
+        }
+
+        RelativeLayout my_collect_btn = (RelativeLayout) getView().findViewById(R.id.my_collect);
+        RelativeLayout my_follow_btn = (RelativeLayout) getView().findViewById(R.id.my_follow);
+
+        my_collect_btn.setOnClickListener(this);
+        my_follow_btn.setOnClickListener(this);
     }
 
     @Override
@@ -65,6 +69,28 @@ public class MyFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_my, container, false);
+    }
+
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.my_collect:
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_layout, new collect(), null)
+                        .addToBackStack(null)
+                        .commit();
+
+                break;
+            case R.id.my_follow:
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_layout, new focus(), null)
+                        .addToBackStack(null)
+                        .commit();
+                break;
+        }
+
     }
 
 

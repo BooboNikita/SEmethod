@@ -3,21 +3,23 @@ package com.example.baodi.zhihu.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.LoaderManager.LoaderCallbacks;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.app.LoaderManager.LoaderCallbacks;
+
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
+
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -43,8 +45,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.Headers;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -75,7 +79,7 @@ public class LogupActivity extends AppCompatActivity implements LoaderCallbacks<
     private UserLoginTask mAuthTask = null;
 
     // UI references.
-    private AutoCompleteTextView mEmailView, mTelView;
+    private AutoCompleteTextView mEmailView,mTelView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -209,7 +213,7 @@ public class LogupActivity extends AppCompatActivity implements LoaderCallbacks<
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(tel)) {
+        if(TextUtils.isEmpty(tel)){
             mTelView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
@@ -228,7 +232,7 @@ public class LogupActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(tel, email, password);
+            mAuthTask = new UserLoginTask(tel,email, password);
             mAuthTask.execute((Void) null);
         }
     }
@@ -344,7 +348,7 @@ public class LogupActivity extends AppCompatActivity implements LoaderCallbacks<
         private final String mPassword;
         String res;
 
-        UserLoginTask(String tel, String email, String password) {
+        UserLoginTask(String tel,String email, String password) {
             mTel = tel;
             mEmail = email;
             mPassword = password;
@@ -368,12 +372,12 @@ public class LogupActivity extends AppCompatActivity implements LoaderCallbacks<
             Gson gson = new Gson();
             HashMap<String, String> paramsMap = new HashMap<>();
             // login
-            paramsMap.put("mobile", mTel);
-            paramsMap.put("code", "5802");
+            paramsMap.put("mobile",mTel);
+            paramsMap.put("code","5802");
             paramsMap.put("username", mEmail);
             paramsMap.put("password", mPassword);
             String strEntity = gson.toJson(paramsMap);
-            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), strEntity);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"),strEntity);
 
             Call call = request_interface.postRegister(body);
             try {
@@ -385,7 +389,7 @@ public class LogupActivity extends AppCompatActivity implements LoaderCallbacks<
                     String login_token = String2Json(responseBodyString).getString("token");
                     SharedPreferences sp = getSharedPreferences("loginToken", 0);
                     SharedPreferences.Editor editor = sp.edit();
-                    editor.putString("token", "JWT " + login_token);
+                    editor.putString("token", "JWT "+login_token);
                     editor.commit();
                     res = String2Json(responseBodyString).getString("username");
 
@@ -410,12 +414,13 @@ public class LogupActivity extends AppCompatActivity implements LoaderCallbacks<
             if (str.equals(mEmail)) {
 //                finish();
                 Intent intent = new Intent();
-                intent.setClass(LogupActivity.this, LoginActivity.class);
+                intent.setClass(LogupActivity.this,LoginActivity.class);
                 startActivity(intent);
-            } else if (str.equals("wrongnumber")) {
+            }else if(str.equals("wrongnumber")){
                 mTelView.setError("Wrong number");
                 mPasswordView.requestFocus();
-            } else {
+            }
+            else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }

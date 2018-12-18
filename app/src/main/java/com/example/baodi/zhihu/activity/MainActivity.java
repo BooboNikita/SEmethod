@@ -1,7 +1,7 @@
 package com.example.baodi.zhihu.activity;
 
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 
 import com.example.baodi.zhihu.R;
 

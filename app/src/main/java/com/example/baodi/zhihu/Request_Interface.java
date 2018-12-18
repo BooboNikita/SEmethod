@@ -1,15 +1,23 @@
 package com.example.baodi.zhihu;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.Map;
+
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-
+import retrofit2.http.QueryMap;
 
 /**
  * Created by Swee on 2018/12/6.
@@ -60,6 +68,9 @@ public interface Request_Interface {
     @GET("api/v1/answers/")
     Call<String> getAnswers();
 
+    @GET("api/v1/answers/{answerId}/")
+    Call<String> getAnswersinID(@Path("answerId") String answerId);
+
     // 提交一个回答
     @POST("api/v1/answers/")
     Call<String> postAnswer(@Body RequestBody body, @Header("Authorization") String token);
@@ -67,6 +78,9 @@ public interface Request_Interface {
     // 获取问题列表（问题信息中包含对应回答列表）
     @GET("api/v1/questions/")
     Call<String> getQuestions();
+
+    @GET("api/v1/questions/{questionId}/")
+    Call<String> getQuestionsinID(@Path("questionId") String questionId);
 
 //    // 获取问题列表（问题信息中包含对应回答列表）
 //    @GET("api/v1/questions/")

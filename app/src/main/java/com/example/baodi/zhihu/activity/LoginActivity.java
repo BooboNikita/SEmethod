@@ -3,21 +3,23 @@ package com.example.baodi.zhihu.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.LoaderManager.LoaderCallbacks;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.app.LoaderManager.LoaderCallbacks;
+
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
+
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -43,8 +45,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.Headers;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -363,7 +367,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             paramsMap.put("username", mEmail);
             paramsMap.put("password", mPassword);
             String strEntity = gson.toJson(paramsMap);
-            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), strEntity);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"),strEntity);
 
             Call call = request_interface.postLogin(body);
             try {
@@ -375,13 +379,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     String login_token = String2Json(responseBodyString).getString("token");
                     SharedPreferences sp = getSharedPreferences("loginToken", 0);
                     SharedPreferences.Editor editor = sp.edit();
-                    editor.putString("token", "JWT " + login_token);
+                    editor.putString("token", "JWT "+login_token);
                     editor.commit();
                     res = String2Json(responseBodyString).getString("username");
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -397,10 +401,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //                    return pieces[1].equals(mPassword);
 //                }
 //            }
-            Log.d("res", res);
-            if (res.equals(mEmail)) {
+            Log.d("res",res);
+            if(res.equals(mEmail)){
                 return true;
-            } else {
+            }else {
                 return false;
             }
 
@@ -418,7 +422,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (success) {
 //                finish();
                 Intent intent = new Intent();
-                intent.setClass(LoginActivity.this, questionPage.class);
+                intent.setClass(LoginActivity.this,questionPage.class);
                 startActivity(intent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

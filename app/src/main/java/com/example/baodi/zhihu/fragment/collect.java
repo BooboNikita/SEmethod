@@ -1,14 +1,29 @@
 package com.example.baodi.zhihu.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.baodi.zhihu.R;
+import com.example.baodi.zhihu.SomeClass.Answer;
+import com.example.baodi.zhihu.SomeClass.Question;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +42,27 @@ public class collect extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private TextView question_text, questionpage_follow_number,
+            questionpage_answer_number;
+    private ListView question_list;
+    private List<Answer> questionList;
+    private List<Integer> questionID_list;
+    private int questionId;
+    private Question question;
+    private BaseAdapter adapter;
+    Handler handler;
+
+    private JSONObject String2Json(String str) {
+        try {
+            JSONObject json = new JSONObject(str);
+            Log.d("json", json.getString("token"));
+            return json;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     private OnFragmentInteractionListener mListener;
 
@@ -59,13 +95,81 @@ public class collect extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_collect, container, false);
+        final View view = inflater.inflate(R.layout.fragment_collect, container, false);
+        questionList = new ArrayList<>();
+        questionID_list = new ArrayList<>();
+        SharedPreferences sp = getActivity().getSharedPreferences("loginToken", 0);
+        //final String token = sp.getString("token", null);
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6ImJhb2RpIiwiZXhwIjoxNTQ1NzA2NjIwLCJlbWFpbCI6IiJ9.kD729UXByGTD5-nhQ7zoSahNRhOform4VsXE9dNsllU";
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                if (msg.what == 1) {
+//                    Log.d("numberlist", String.valueOf(tmp.answer_number));
+                    initUI(view);
+                }
+                super.handleMessage(msg);
+            }
+        };
+
+
+        return view;
+    }
+
+    private void initUI(View v) {
+        question_text = (TextView) v.findViewById(R.id.question_text);
+        questionpage_follow_number = (TextView) v.findViewById(R.id.questionpage_follow_number);
+        questionpage_answer_number = (TextView) v.findViewById(R.id.questionpage_answer_number);
+
+        questionpage_follow_number.setText(String.valueOf(question.follow_number) + "人关注");
+        questionpage_answer_number.setText(String.valueOf(question.answer_number) + "个回答");
+
+        adapter = new BaseAdapter() {
+            @Override
+            public int getCount() {
+                Log.d("numberoflist", String.valueOf(questionList.size()));
+                return questionList.size();
+            }
+
+            @Override
+            public Object getItem(int i) {
+                return null;
+            }
+
+            @Override
+            public long getItemId(int i) {
+                return 0;
+            }
+
+            @Override
+            public View getView(int i, View view, ViewGroup viewGroup) {
+                LayoutInflater layoutInflater = collect.this.getLayoutInflater();
+                View v;
+                if (view == null) {
+                    v = layoutInflater.inflate(R.layout.collect_list_item, null);
+                } else {
+                    v = view;
+                    Log.d("info", "有缓存，不需要重新生成" + i);
+                }
+                question_text = (TextView) v.findViewById(R.id.question_text);
+                questionpage_follow_number = (TextView) v.findViewById(R.id.questionpage_follow_number);
+
+                Question tmp = (Question) question;
+                questionpage_follow_number.setText(tmp.follow_number);
+                questionpage_answer_number.setText(tmp.answer_number);
+                question_text.setText(tmp.title);
+
+                return v;
+            }
+        };
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

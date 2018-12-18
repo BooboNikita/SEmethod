@@ -10,7 +10,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-
 /**
  * Created by Swee on 2018/12/6.
  */
@@ -60,6 +59,9 @@ public interface Request_Interface {
     @GET("api/v1/answers/")
     Call<String> getAnswers();
 
+    @GET("api/v1/answers/{answerId}/")
+    Call<String> getAnswersinID(@Path("answerId") String answerId);
+
     // 提交一个回答
     @POST("api/v1/answers/")
     Call<String> postAnswer(@Body RequestBody body, @Header("Authorization") String token);
@@ -67,6 +69,9 @@ public interface Request_Interface {
     // 获取问题列表（问题信息中包含对应回答列表）
     @GET("api/v1/questions/")
     Call<String> getQuestions();
+
+    @GET("api/v1/questions/{questionId}/")
+    Call<String> getQuestionsinID(@Path("questionId") String questionId);
 
 //    // 获取问题列表（问题信息中包含对应回答列表）
 //    @GET("api/v1/questions/")

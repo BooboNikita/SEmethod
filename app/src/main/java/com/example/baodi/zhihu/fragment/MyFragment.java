@@ -52,6 +52,14 @@ public class MyFragment extends Fragment {
         }
 
 
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+
         RelativeLayout my_collect_btn = (RelativeLayout) getView().findViewById(R.id.my_collect);
         RelativeLayout my_follow_btn = (RelativeLayout) getView().findViewById(R.id.my_follow);
 
@@ -73,12 +81,6 @@ public class MyFragment extends Fragment {
                         .replace(R.id.container, new focus()).commit();
             }
         });
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_my, container, false);
     }
 

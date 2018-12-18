@@ -17,7 +17,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.baodi.zhihu.R;
-import com.example.baodi.zhihu.Request_Interface;
 import com.example.baodi.zhihu.SomeClass.Answer;
 import com.example.baodi.zhihu.SomeClass.Question;
 

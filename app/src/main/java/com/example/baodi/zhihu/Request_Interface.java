@@ -1,13 +1,23 @@
 package com.example.baodi.zhihu;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.Map;
+
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 /**
  * Created by Swee on 2018/12/6.
@@ -26,17 +36,40 @@ public interface Request_Interface {
     @POST("api/v1/flow_questions/")
     Call<String> postFlowQuestion(@Body RequestBody body, @Header("Authorization") String token);
 
-    // 获取点赞回答列表
+    // 取消关注问题
+    @DELETE("api/v1/flow_questions/{questionId}/")
+    Call<String> cancelFlowQuestion(@Header("Authorization") String token, @Path("questionId") String questionId);
+
+    // 获取收藏回答列表
     @GET("api/v1/favs/")
     Call<String> getFavList(@Header("Authorization") String token);
 
-    // 对回答进行点赞
+    // 对回答进行收藏
     @POST("api/v1/favs/")
     Call<String> postFav(@Body RequestBody body, @Header("Authorization") String token);
+
+    // 取消对回答的收藏
+    @DELETE("api/v1/favs/{answerId}/")
+    Call<String> deleteFav(@Header("Authorization") String token, @Path("answerId") String answerId);
+
+    // 获取点赞回答列表
+    @GET("api/v1/votes/")
+    Call<String> getVoteList(@Header("Authorization") String token);
+
+    // 对回答进行点赞
+    @POST("api/v1/votes/")
+    Call<String> postVote(@Body RequestBody body, @Header("Authorization") String token);
+
+    // 取消对回答的点赞
+    @DELETE("api/v1/votes/{answerId}/")
+    Call<String> cancelVote(@Header("Authorization") String token, @Path("answerId") String answerId);
 
     // 获取回答列表（这个是所有问题的回答，不建议使用）
     @GET("api/v1/answers/")
     Call<String> getAnswers();
+
+    @GET("api/v1/answers/{answerId}/")
+    Call<String> getAnswersinID(@Path("answerId") String answerId);
 
     // 提交一个回答
     @POST("api/v1/answers/")
@@ -46,8 +79,12 @@ public interface Request_Interface {
     @GET("api/v1/questions/")
     Call<String> getQuestions();
 
-    @GET("api/v1/questions/{id}")
-    Call<String> getQuestionsinID(@Path("id") String ID);
+    @GET("api/v1/questions/{questionId}/")
+    Call<String> getQuestionsinID(@Path("questionId") String questionId);
+
+//    // 获取问题列表（问题信息中包含对应回答列表）
+//    @GET("api/v1/questions/")
+//    Call<String> getQuestions();
 
     // 获取搜索问题列表（问题信息中包含对应回答列表）
     @GET("api/v1/questions/")

@@ -5,6 +5,7 @@ package com.example.baodi.zhihu.index;
  */
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Message;
@@ -13,13 +14,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.baodi.zhihu.R;
 import com.example.baodi.zhihu.Request_Interface;
+import com.example.baodi.zhihu.SomeClass.Answer;
 import com.example.baodi.zhihu.SomeClass.Question;
 import com.example.baodi.zhihu.SomeClass.Topic;
+import com.example.baodi.zhihu.activity.answerPage;
+import com.example.baodi.zhihu.activity.questionPage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -118,7 +124,8 @@ public class Tab1Fragment extends Fragment {
                                     JSONObject job = json.getJSONObject(i);  // 遍历 jsonarray 数组，把每一个对象转成 json 对象
 //                                    System.out.println(job.get("name")+"=") ;  // 得到 每个对象中的属性值
 //                                    Log.d("body", job.getString("body"));
-                                    ContentItem tmp=new ContentItem(job.getString("body"),job.getString("vote")+" 人赞成","作者："+job.getString("author_name"));
+                                    ContentItem tmp=new ContentItem(job.getString("body"),job.getString("vote")+" 人赞成","作者："+job.getString("author_name"),
+                                            job.getInt("id"));
                                     Log.d("title",tmp.getTitle());
                                     Log.d("attend_num",tmp.getAttend_num());
                                     Log.d("answer_num",tmp.getAnswer_num());
@@ -148,6 +155,21 @@ public class Tab1Fragment extends Fragment {
 
         Log.d("data_size",""+data.size());
         Log.d("data_size2",""+data.size());
+
+        contacts_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Bundle bundle = new Bundle();
+//                Answer tmp = (Answer) answerList.get(i);
+                ContentItem item = data.get(i);
+                bundle.putInt("answerID",item.answer_ID);
+//                bundle.putSerializable("answer_list", (Serializable) answerID_list);
+                Intent intent = new Intent(getActivity(),answerPage.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
 
         return view;
     }

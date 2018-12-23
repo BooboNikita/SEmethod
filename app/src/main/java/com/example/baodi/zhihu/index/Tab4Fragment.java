@@ -39,7 +39,7 @@ public class Tab4Fragment extends Fragment {
         final List<ContentItem> data=new ArrayList<>();
         final ListView contacts_list=(ListView) view.findViewById(R.id.list_view);
         for(int i=0;i<10;i++){
-            ContentItem tmp=new ContentItem(title[myArray.get(i).intValue()],attend_num[myArray.get(i).intValue()],answer_num[myArray.get(i).intValue()]);
+            ContentItem tmp=new ContentItem(title[myArray.get(i).intValue()],attend_num[myArray.get(i).intValue()],answer_num[myArray.get(i).intValue()],1);
             data.add(tmp);
         }
 

@@ -30,6 +30,7 @@ public class answerPage extends AppCompatActivity {
 
 
     private Answer answer;
+    private Question question;
     private TextView quesion_text,answer_number,answer_text;
     int answerID;
     static Handler handler;
@@ -42,10 +43,10 @@ public class answerPage extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         answerID = bundle.getInt("answerID");
-        answerList = (List<Answer>) bundle.get("answer_list");
+//        answerList = (List<Answer>) bundle.get("answer_list");
 
         Log.d("answerID", String.valueOf(answerID));
-        Log.d("numberofList", String.valueOf(answerList.size()));
+//        Log.d("numberofList", String.valueOf(answerList.size()));
 
         update_Info();
         handler = new Handler(){
@@ -54,6 +55,10 @@ public class answerPage extends AppCompatActivity {
                 if(msg.what == 1){
 //                    Log.d("numberlist", String.valueOf(tmp.answer_number));
                     initUI();
+                    getAnswerCount();
+                }
+                else if(msg.what == 2) {
+                    answer_number.setText("查看全部"+question.answer_number+"个回答");
                 }
                 super.handleMessage(msg);
             }
@@ -66,11 +71,66 @@ public class answerPage extends AppCompatActivity {
         answer_text = (TextView) findViewById(R.id.answerpage_answer_text);
 
         quesion_text.setText(answer.quesContent);
-        answer_number.setText("查看全部"+answerList.size()+"个回答");
+//        answer_number.setText("查看全部"+answerList.size()+"个回答");
         answer_text.setText(answer.answerContent);
 
 
     }
+
+    private void getAnswerCount(){
+        // 获取登陆后本地token
+        SharedPreferences sp = getSharedPreferences("loginToken", 0);
+        final String token = sp.getString("token", null);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Request_Interface.ENDPOINT)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final Request_Interface request_interface = retrofit.create(Request_Interface.class);
+
+        try {
+            // GET 方法调用
+            Call call = request_interface.getQuestionsinID(String.valueOf(answer.quesID));
+            call.enqueue(new Callback() {
+                @Override
+                public void onResponse(Call call, Response response) {
+                    if (response.isSuccessful()) {
+                        String responseBodyString = response.body().toString();
+//                        Log.d("Response body", responseBodyString);
+                        try {
+                            JSONObject json = new JSONObject(responseBodyString);
+                            question = new Question();
+                            question.quesID = Integer.parseInt(json.get("id").toString());
+                            question.anonymity = Boolean.parseBoolean(json.get("anonymous").toString());
+                            question.title = json.get("title").toString();
+                            question.quesDescription = json.get("body").toString();
+                            question.answer_number = Integer.parseInt(json.get("answers_count").toString());
+                            question.follow_number = Integer.parseInt(json.get("flows").toString());
+                            question.topic_tag = new Topic();
+                            question.topic_tag.text = json.get("topic_name").toString();
+                            Message msg = new Message();
+                            msg.what = 2;
+                            handler.sendMessage(msg);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }else {
+                        Log.d("Response errorBody", response.toString());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Throwable t) {
+                    Log.d("connect:", "failure");
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     private void update_Info() {

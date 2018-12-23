@@ -25,4 +25,15 @@
         <item name="android:background">@color/black_overlay</item>
     </style>
 
+    <style name="NoActionBar" parent="Theme.AppCompat">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="MyToolbarTheme"
+        parent="@style/ThemeOverlay.AppCompat.Dark">
+        <!--<item name="colorControlNormal">@color/white</item>-->
+        <!--<item name="titleTextColor">@color/white</item>-->
+    </style>
+
 </resources>

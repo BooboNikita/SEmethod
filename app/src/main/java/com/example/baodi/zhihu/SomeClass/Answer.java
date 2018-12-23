@@ -10,6 +10,7 @@ public class Answer {
     public String answerContent;
     public boolean anonymity;
     public int like_number;
+    public int fav_number;
     public int dislike_number;
     public int comment_number;
     public List<Comment> comment_list;

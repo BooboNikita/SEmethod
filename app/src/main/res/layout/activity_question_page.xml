@@ -7,44 +7,41 @@
     tools:context=".activity.questionPage"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="5dp">
-        <RelativeLayout
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:padding="5dp">-->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:gravity="center_vertical"
-            android:background="@drawable/shape_grey_coner">
+            >
             <ImageView
                 android:id="@+id/questionpage_back_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:src="@drawable/back"/>
-            <ImageView
-                android:id="@+id/questionpage_share_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/share"
-                android:layout_marginRight="5dp"
-                android:layout_alignParentRight="true"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                />
-            <EditText
+            <SearchView
                 android:id="@+id/questionpage_search"
                 android:layout_width="match_parent"
-                android:layout_toLeftOf="@id/questionpage_share_btn"
-                android:layout_toRightOf="@id/questionpage_back_btn"
+                android:layout_weight="10"
                 android:layout_height="wrap_content"
-                android:hint="搜索知乎内容"
-                android:background="@null"/>
+                android:queryHint="搜索知乎内容" />
 
-        </RelativeLayout>
-    </LinearLayout>
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="5dp"-->
+                <!--/>-->
+
+
+        </LinearLayout>
+    <!--</LinearLayout>-->
 
     <com.example.baodi.zhihu.MyScrollView
         android:layout_width="match_parent"
@@ -56,6 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <LinearLayout
                 android:id="@+id/questionpage_tag_tab"
                 android:layout_width="match_parent"
@@ -102,6 +100,17 @@
                         <!--android:layout_marginLeft="20dp"-->
                         <!--android:layout_centerVertical="true"-->
                         <!--android:text="....条评论"/>-->
+                    <ImageButton
+                        android:id="@+id/questionpage_share_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:layout_toRightOf="@id/questionpage_follow_number"
+                        android:src="@drawable/share"
+                        android:layout_marginRight="5dp"
+                        />
                     <Button
                         android:id="@+id/questionpage_follow_question"
                         android:layout_width="wrap_content"
@@ -163,13 +172,12 @@
                 <com.example.baodi.zhihu.UnScrollListView
                     android:id="@+id/questionpage_answer_list"
                     android:layout_width="match_parent"
+                    android:paddingVertical="20dp"
+                    android:paddingHorizontal="5dp"
                     android:layout_height="match_parent"></com.example.baodi.zhihu.UnScrollListView>
             </LinearLayout>
         </LinearLayout>
 
     </com.example.baodi.zhihu.MyScrollView>
-    
-
-
 
 </LinearLayout>

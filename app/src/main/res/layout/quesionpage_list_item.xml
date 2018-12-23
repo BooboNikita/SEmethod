@@ -8,12 +8,19 @@
         android:id="@+id/questionpage_author_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"/>
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"/>
     <TextView
         android:id="@+id/questionpage_answer_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="15dp"/>
+        <TextView
+            android:id="@+id/questionpage_vote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp" />
 
 </LinearLayout>

@@ -8,6 +8,8 @@
     <color name="grey1">#aaaaaa</color>
     <color name="black">#000000</color>
     <color name="light_light_grey">#dddddd</color>
+    <color name="blue">#7890a8</color>
+    <color name="cat">#a8a890</color>
 
     <color name="black_overlay">#66000000</color>
     <color name="gray">#808080</color>

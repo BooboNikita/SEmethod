@@ -7,7 +7,7 @@
     android:baselineAligned="true"
     tools:context=".fragment.MyFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

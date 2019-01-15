@@ -7,38 +7,5 @@
     android:baselineAligned="true"
     tools:context=".fragment.MyFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <!--相似的方式建一个layout方个人主页栏-->
-
-
-        <include
-            android:id="@+id/write_follow_collect_scan"
-            layout="@layout/write_follow_collect_scan"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:background="@drawable/shape_grey_line"/>
-        <include
-            android:id="@+id/myfunction_layout"
-            layout="@layout/myfunction_layout"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:background="@drawable/shape_grey_line"/>
-
-
-
-    </LinearLayout>
-
-
-`
-
-
-
 
 </LinearLayout>

@@ -6,10 +6,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-<<<<<<< Updated upstream
-=======
     <uses-permission android:name="android.permission.INTERNET" />
->>>>>>> Stashed changes
 
     <application
         android:allowBackup="true"
@@ -19,13 +16,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:name=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".activity.LoginActivity"
+            android:exported="true"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".LogupActivity"
+            android:name=".activity.LogupActivity"
             android:exported="true"
             android:label="@string/title_activity_logup" />
         <activity
@@ -40,10 +38,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< Updated upstream
-        <activity android:name=".indexPage"
-            android:exported="true"></activity>
-=======
         <activity
             android:name=".indexPage"
             android:exported="true" />
@@ -66,7 +60,6 @@
         <activity
             android:name=".activity.editQuestion"
             android:theme="@style/AppTheme.NoActionBar" />
->>>>>>> Stashed changes
     </application>
 
 </manifest>

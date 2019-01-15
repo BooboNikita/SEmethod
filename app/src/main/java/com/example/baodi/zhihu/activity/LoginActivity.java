@@ -1,8 +1,10 @@
-package com.example.baodi.zhihu;
+package com.example.baodi.zhihu.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -19,6 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,15 +33,34 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.baodi.zhihu.R;
+import com.example.baodi.zhihu.Request_Interface;
+import com.example.baodi.zhihu.indexPage;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import okhttp3.Headers;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LogupActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -66,7 +88,7 @@ public class LogupActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_logup);
+        setContentView(R.layout.activity_login);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Set up the login form.
@@ -187,11 +209,12 @@ public class LogupActivity extends AppCompatActivity implements LoaderCallbacks<
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
         }
+//        else if (!isEmailValid(email)) {
+//            mEmailView.setError(getString(R.string.error_invalid_email));
+//            focusView = mEmailView;
+//            cancel = true;
+//        }
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -289,7 +312,7 @@ public class LogupActivity extends AppCompatActivity implements LoaderCallbacks<
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LogupActivity.this,
+                new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
@@ -314,33 +337,74 @@ public class LogupActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
+        private boolean mark;
+        String res;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
+            mark = false;
+            res = null;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
+//            Log.d("params",params.toString());
 
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(Request_Interface.ENDPOINT)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            final Request_Interface request_interface = retrofit.create(Request_Interface.class);
+
+            // POST方法调用
+            Gson gson = new Gson();
+            HashMap<String, String> paramsMap = new HashMap<>();
+            // login
+            paramsMap.put("username", mEmail);
+            paramsMap.put("password", mPassword);
+            String strEntity = gson.toJson(paramsMap);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"),strEntity);
+
+            Call call = request_interface.postLogin(body);
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
+                Response response = call.execute();
+                String responseBodyString = response.body().toString();
+                Log.d("Response body", responseBodyString);
+//                 每次调用login API时取消注释，保存token，其他api需要验证登录需要用到
+                try {
+                    String login_token = String2Json(responseBodyString).getString("token");
+                    SharedPreferences sp = getSharedPreferences("loginToken", 0);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString("token", "JWT "+login_token);
+                    editor.commit();
+                    res = String2Json(responseBodyString).getString("username");
+                    Log.d("res",res);
+                    if(res.equals(mEmail)){
+                        return true;
+                    }else {
+                        return false;
+                    }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+
+            return false;
 
             // TODO: register the new account here.
-            return true;
+//            return true;
+//            Log.d("mark",String.valueOf(mark));
+//            return mark;
         }
 
         @Override
@@ -349,7 +413,10 @@ public class LogupActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                finish();
+//                finish();
+                Intent intent = new Intent();
+                intent.setClass(LoginActivity.this,indexPage.class);
+                startActivity(intent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -360,6 +427,17 @@ public class LogupActivity extends AppCompatActivity implements LoaderCallbacks<
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+        }
+
+        private JSONObject String2Json(String str) {
+            try {
+                JSONObject json = new JSONObject(str);
+                Log.d("json", json.getString("token"));
+                return json;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 }

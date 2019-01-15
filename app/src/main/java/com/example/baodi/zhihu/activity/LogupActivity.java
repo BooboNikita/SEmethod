@@ -1,8 +1,10 @@
-package com.example.baodi.zhihu;
+package com.example.baodi.zhihu.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -19,6 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,27 +33,33 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-<<<<<<< Updated upstream:app/src/main/java/com/example/baodi/zhihu/LoginActivity.java
-=======
 import com.example.baodi.zhihu.R;
 import com.example.baodi.zhihu.Request_Interface;
-import com.example.baodi.zhihu.indexPage;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
->>>>>>> Stashed changes:app/src/main/java/com/example/baodi/zhihu/activity/LoginActivity.java
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import okhttp3.Headers;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LogupActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -70,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private UserLoginTask mAuthTask = null;
 
     // UI references.
-    private AutoCompleteTextView mEmailView;
+    private AutoCompleteTextView mEmailView,mTelView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -78,10 +87,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_logup);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Set up the login form.
+        mTelView = (AutoCompleteTextView) findViewById(R.id.tel_number);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
@@ -177,10 +187,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         // Reset errors.
+        mTelView.setError(null);
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
+        String tel = mTelView.getText().toString();
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
@@ -199,11 +211,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
+        }
+
+        if(TextUtils.isEmpty(tel)){
+            mTelView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
         }
+//        else if (!isEmailValid(email)) {
+//            mEmailView.setError(getString(R.string.error_invalid_email));
+//            focusView = mEmailView;
+//            cancel = true;
+//        }
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -213,7 +232,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(tel,email, password);
             mAuthTask.execute((Void) null);
         }
     }
@@ -301,7 +320,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
+                new ArrayAdapter<>(LogupActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
@@ -322,36 +341,46 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends AsyncTask<Void, Void, String> {
 
+        private final String mTel;
         private final String mEmail;
         private final String mPassword;
+        String res;
 
-        UserLoginTask(String email, String password) {
+        UserLoginTask(String tel,String email, String password) {
+            mTel = tel;
             mEmail = email;
             mPassword = password;
+            res = null;
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            try {
-<<<<<<< Updated upstream:app/src/main/java/com/example/baodi/zhihu/LoginActivity.java
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(Request_Interface.ENDPOINT)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-=======
+            final Request_Interface request_interface = retrofit.create(Request_Interface.class);
+
+
+            // POST方法调用
+            Gson gson = new Gson();
+            HashMap<String, String> paramsMap = new HashMap<>();
+            // login
+            paramsMap.put("mobile",mTel);
+            paramsMap.put("code","5802");
+            paramsMap.put("username", mEmail);
+            paramsMap.put("password", mPassword);
+            String strEntity = gson.toJson(paramsMap);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"),strEntity);
+
+            Call call = request_interface.postRegister(body);
+            try {
                 Response response = call.execute();
                 String responseBodyString = response.body().toString();
                 Log.d("Response body", responseBodyString);
@@ -363,44 +392,35 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     editor.putString("token", "JWT "+login_token);
                     editor.commit();
                     res = String2Json(responseBodyString).getString("username");
-                    Log.d("res",res);
-                    if(res.equals(mEmail)){
-                        return true;
-                    }else {
-                        return false;
-                    }
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-
-            return false;
->>>>>>> Stashed changes:app/src/main/java/com/example/baodi/zhihu/activity/LoginActivity.java
-
-            // TODO: register the new account here.
-            return true;
+            return res;
+//
+//            // TODO: register the new account here.
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(final String str) {
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
-<<<<<<< Updated upstream:app/src/main/java/com/example/baodi/zhihu/LoginActivity.java
-                finish();
-=======
+            if (str.equals(mEmail)) {
 //                finish();
                 Intent intent = new Intent();
-                intent.setClass(LoginActivity.this,indexPage.class);
+                intent.setClass(LogupActivity.this,LoginActivity.class);
                 startActivity(intent);
->>>>>>> Stashed changes:app/src/main/java/com/example/baodi/zhihu/activity/LoginActivity.java
-            } else {
+            }else if(str.equals("wrongnumber")){
+                mTelView.setError("Wrong number");
+                mPasswordView.requestFocus();
+            }
+            else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
@@ -410,6 +430,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+        }
+
+        private JSONObject String2Json(String str) {
+            try {
+                JSONObject json = new JSONObject(str);
+                Log.d("json", json.getString("token"));
+                return json;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="84dp">
+    <TextView
+        android:id="@+id/question_text"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        />
+    <TextView
+        android:id="@+id/questionpage_follow_number"
+        android:layout_width="150dp"
+        android:layout_height="47dp"
+        android:layout_below="@+id/question_text"/>
+    <TextView
+        android:id="@+id/questionpage_answer_number"
+        android:layout_width="150dp"
+        android:layout_height="47dp"
+        android:layout_below="@+id/question_text"
+        android:layout_toRightOf="@+id/questionpage_follow_number"/>
+
+</RelativeLayout>

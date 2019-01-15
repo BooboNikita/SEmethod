@@ -23,12 +23,35 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
+<<<<<<< Updated upstream
+=======
+                                                <entry key="paddingPercent" value="20" />
+>>>>>>> Stashed changes
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
                                           </PersistentState>
                                         </value>
                                       </entry>
+<<<<<<< Updated upstream
+=======
+                                      <entry key="clipartAsset">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/communication/ic_chat_bubble_black_24dp.xml" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                    </map>
+                                  </option>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="outputName" value="comment" />
+>>>>>>> Stashed changes
                                     </map>
                                   </option>
                                 </PersistentState>

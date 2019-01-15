@@ -30,6 +30,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+<<<<<<< Updated upstream:app/src/main/java/com/example/baodi/zhihu/LoginActivity.java
+=======
+import com.example.baodi.zhihu.R;
+import com.example.baodi.zhihu.Request_Interface;
+import com.example.baodi.zhihu.indexPage;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+>>>>>>> Stashed changes:app/src/main/java/com/example/baodi/zhihu/activity/LoginActivity.java
 import java.util.ArrayList;
 import java.util.List;
 
@@ -325,6 +337,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
 
             try {
+<<<<<<< Updated upstream:app/src/main/java/com/example/baodi/zhihu/LoginActivity.java
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -338,6 +351,36 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     return pieces[1].equals(mPassword);
                 }
             }
+=======
+                Response response = call.execute();
+                String responseBodyString = response.body().toString();
+                Log.d("Response body", responseBodyString);
+//                 每次调用login API时取消注释，保存token，其他api需要验证登录需要用到
+                try {
+                    String login_token = String2Json(responseBodyString).getString("token");
+                    SharedPreferences sp = getSharedPreferences("loginToken", 0);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString("token", "JWT "+login_token);
+                    editor.commit();
+                    res = String2Json(responseBodyString).getString("username");
+                    Log.d("res",res);
+                    if(res.equals(mEmail)){
+                        return true;
+                    }else {
+                        return false;
+                    }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            return false;
+>>>>>>> Stashed changes:app/src/main/java/com/example/baodi/zhihu/activity/LoginActivity.java
 
             // TODO: register the new account here.
             return true;
@@ -349,7 +392,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+<<<<<<< Updated upstream:app/src/main/java/com/example/baodi/zhihu/LoginActivity.java
                 finish();
+=======
+//                finish();
+                Intent intent = new Intent();
+                intent.setClass(LoginActivity.this,indexPage.class);
+                startActivity(intent);
+>>>>>>> Stashed changes:app/src/main/java/com/example/baodi/zhihu/activity/LoginActivity.java
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

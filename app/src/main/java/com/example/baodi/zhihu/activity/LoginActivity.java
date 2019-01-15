@@ -373,26 +373,31 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             Call call = request_interface.postLogin(body);
             try {
                 Response response = call.execute();
-                String responseBodyString = response.body().toString();
-                Log.d("Response body", responseBodyString);
+                if(response.isSuccessful()){
+                    String responseBodyString = response.body().toString();
+                    Log.d("Response body", responseBodyString);
 //                 每次调用login API时取消注释，保存token，其他api需要验证登录需要用到
-                try {
-                    String login_token = String2Json(responseBodyString).getString("token");
-                    SharedPreferences sp = getSharedPreferences("loginToken", 0);
-                    SharedPreferences.Editor editor = sp.edit();
-                    editor.putString("token", "JWT "+login_token);
-                    editor.commit();
-                    res = String2Json(responseBodyString).getString("username");
-                    Log.d("res",res);
-                    if(res.equals(mEmail)){
-                        return true;
-                    }else {
-                        return false;
-                    }
+                    try {
+                        String login_token = String2Json(responseBodyString).getString("token");
+                        SharedPreferences sp = getSharedPreferences("loginToken", 0);
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.putString("token", "JWT "+login_token);
+                        editor.commit();
+                        res = String2Json(responseBodyString).getString("username");
+                        Log.d("res",res);
+                        if(res.equals(mEmail)){
+                            return true;
+                        }else {
+                            return false;
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                }else{
+
+                }
+
 
             } catch (IOException e) {
                 e.printStackTrace();

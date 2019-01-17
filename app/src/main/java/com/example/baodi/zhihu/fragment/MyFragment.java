@@ -1,5 +1,6 @@
 package com.example.baodi.zhihu.fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.example.baodi.zhihu.R;
 import com.example.baodi.zhihu.Request_Interface;
 import com.example.baodi.zhihu.index.ContentItem;
+import com.example.baodi.zhihu.profile.ProfileActivity;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -46,7 +48,7 @@ public class MyFragment extends Fragment {
     private String mParam2;
     View view;
     private RelativeLayout my_collect_btn,my_follow_btn;
-    private TextView my_collect_num,my_follow_num,my_id;
+    private TextView my_collect_num,my_follow_num,my_id,profile_btn;
     private Handler handler;
     int collect_num,focus_num;
 
@@ -91,6 +93,7 @@ public class MyFragment extends Fragment {
         my_id = (TextView) view.findViewById(R.id.my_id);
         my_collect_num = (TextView) view.findViewById(R.id.my_collect_num);
         my_follow_num = (TextView) view.findViewById(R.id.my_follow_num);
+        profile_btn = (TextView) view.findViewById(R.id.profile_btn);
 
 
         SharedPreferences sp = getActivity().getSharedPreferences("loginToken", 0);
@@ -122,6 +125,14 @@ public class MyFragment extends Fragment {
                         .beginTransaction()
                         .addToBackStack(null)  //将当前fragment加入到返回栈中
                         .replace(R.id.content_layout, new focus()).commit();
+            }
+        });
+
+        profile_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(),ProfileActivity.class);
+                startActivity(intent);
             }
         });
 

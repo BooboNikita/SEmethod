@@ -2,6 +2,7 @@ package com.example.baodi.zhihu.profile;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -61,9 +62,13 @@ public class ProfileActivity extends AppCompatActivity {
         width = wm.getDefaultDisplay().getWidth();
         height = wm.getDefaultDisplay().getHeight();
 
-        mToolbar.setTitle("");
+//        mToolbar.setTitle("");
         mToolbar.setNavigationIcon(R.drawable.ic_back);
-        mToolbar.setTitle("Lancelot");
+
+        SharedPreferences sp = getSharedPreferences("loginToken", 0);
+        String username = sp.getString("username", null);
+        mToolbar.setTitle(username);
+//        mToolbar.setTitle("Lancelot");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mTabLayoutCopy.setVisibility(View.GONE);
@@ -106,7 +111,16 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+
     }
+
 
     @Override
     protected void onResume() {

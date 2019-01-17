@@ -1,10 +1,11 @@
 package com.example.baodi.zhihu;
 
+import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -15,6 +16,8 @@ import com.example.baodi.zhihu.fragment.MyFragment;
 import com.example.baodi.zhihu.fragment.NotiFragment;
 import com.example.baodi.zhihu.fragment.ThinkFragment;
 import com.example.baodi.zhihu.fragment.UniFragment;
+import com.example.baodi.zhihu.fragment.collect;
+import com.example.baodi.zhihu.fragment.focus;
 
 public class indexPage extends FragmentActivity implements View.OnClickListener {
 
@@ -64,7 +67,9 @@ public class indexPage extends FragmentActivity implements View.OnClickListener 
             indexFragment = new IndexFragment();
         }
         if(!indexFragment.isAdded()){
-            getSupportFragmentManager().beginTransaction().add(R.id.content_layout,indexFragment).commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.content_layout,indexFragment).commit();
 
             currentFragment = indexFragment;
 
@@ -78,8 +83,6 @@ public class indexPage extends FragmentActivity implements View.OnClickListener 
             notiText.setTextColor(ContextCompat.getColor(getBaseContext(),R.color.grey1));
             myImg.setImageResource(R.drawable.my);
             myText.setTextColor(ContextCompat.getColor(getBaseContext(),R.color.grey1));
-
-
         }
     }
 
@@ -183,7 +186,8 @@ public class indexPage extends FragmentActivity implements View.OnClickListener 
             myFragment = new MyFragment();
         }
 
-        addOrShowFragment(getSupportFragmentManager().beginTransaction(),myFragment);
+        addOrShowFragment(getSupportFragmentManager()
+                .beginTransaction(),myFragment);
         indexImg.setImageResource(R.drawable.index_page);
         indexText.setTextColor(ContextCompat.getColor(getBaseContext(),R.color.grey1));
         thinkImg.setImageResource(R.drawable.think);
@@ -210,4 +214,6 @@ public class indexPage extends FragmentActivity implements View.OnClickListener 
 
         currentFragment = fragment;
     }
+
+
 }

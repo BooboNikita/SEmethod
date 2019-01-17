@@ -60,6 +60,10 @@
         <activity
             android:name=".activity.editQuestion"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.indexpage.my_acitvity"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

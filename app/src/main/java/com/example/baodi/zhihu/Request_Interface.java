@@ -82,6 +82,9 @@ public interface Request_Interface {
     @GET("api/v1/questions/{questionId}/")
     Call<String> getQuestionsinID(@Path("questionId") String questionId);
 
+    @GET("api/v1/users/")
+    Call<String> getUser();
+
 //    // 获取问题列表（问题信息中包含对应回答列表）
 //    @GET("api/v1/questions/")
 //    Call<String> getQuestions();

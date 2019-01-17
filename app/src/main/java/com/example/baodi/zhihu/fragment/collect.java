@@ -1,6 +1,7 @@
 package com.example.baodi.zhihu.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,22 +12,33 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.baodi.zhihu.R;
 import com.example.baodi.zhihu.Request_Interface;
 import com.example.baodi.zhihu.SomeClass.Answer;
 import com.example.baodi.zhihu.SomeClass.Question;
+import com.example.baodi.zhihu.SomeClass.Topic;
+import com.example.baodi.zhihu.activity.answerPage;
+import com.example.baodi.zhihu.index.ContentItem;
+import com.example.baodi.zhihu.index.MyAdapter;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -58,6 +70,12 @@ public class collect extends Fragment {
     private Question question;
     private BaseAdapter adapter;
     Handler handler;
+    private ImageView back;
+    private View view;
+    private List<Answer> answer_list;
+    private ListView contacts_list;
+    private List<ContentItem> data;
+
 
 
     private JSONObject String2Json(String str) {
@@ -109,93 +127,101 @@ public class collect extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_collect, container, false);
-        questionList = new ArrayList<>();
-        questionID_list = new ArrayList<>();
+        answer_list = new ArrayList<>();
+
+        view = inflater.inflate(R.layout.fragment_collect, container, false);
+        update_info();
+        back = (ImageView) view.findViewById(R.id.my_collect_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().popBackStack();
+//                getFragmentManager().beginTransaction().hide(collect.this).add(R.id.content_layout,new MyFragment()).commit();
+                Log.d("bye","bye");
+            }
+        });
+
+        contacts_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Bundle bundle = new Bundle();
+//                Answer tmp = (Answer) answerList.get(i);
+                ContentItem item = data.get(i);
+                bundle.putInt("answerID",item.answer_ID);
+//                bundle.putSerializable("answer_list", (Serializable) answerID_list);
+                Intent intent = new Intent(getActivity(),answerPage.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+        return view;
+    }
+
+
+    private void update_info(){
+        // 获取登陆后本地token
+        data=new ArrayList<>();
+        contacts_list=(ListView) view.findViewById(R.id.my_collect_list);
+
+        final MyAdapter content_adapter=new MyAdapter(getActivity(),data);
         SharedPreferences sp = getActivity().getSharedPreferences("loginToken", 0);
-//        final String token = sp.getString("token", null);
-        final String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6ImJhb2RpIiwiZXhwIjoxNTQ1NzA2NjIwLCJlbWFpbCI6IiJ9.kD729UXByGTD5-nhQ7zoSahNRhOform4VsXE9dNsllU";
+        final String token = sp.getString("token", null);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Request_Interface.ENDPOINT)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+
         final Request_Interface request_interface = retrofit.create(Request_Interface.class);
 
-        //        handler = new Handler() {
-//            @Override
-//            public void handleMessage(Message msg) {
-//                if (msg.what == 1) {
-//           //        Log.d("numberlist", String.valueOf(tmp.answer_number));
-//                    initUI(view);
-//                }
-//                super.handleMessage(msg);
-//            }
-//        };
-        return view;
+        try {
+            // GET 方法调用
+            Call call = request_interface.getFavList(token);
+            call.enqueue(new Callback() {
+                @Override
+                public void onResponse(Call call, Response response) {
+                    if (response.isSuccessful()) {
+                        String responseBodyString = response.body().toString();
+                        Log.d("Response body", responseBodyString);
+                        try {
+//                            JSONObject job_tmp = new JSONObject(responseBodyString);
+//                            Log.d("results",job_tmp.getString("results"));
+                            JSONArray json = new JSONArray(responseBodyString);
+                            if(json.length()>0){
+                                for(int i=0;i<json.length();i++){
+                                    JSONObject job = json.getJSONObject(i);  // 遍历 jsonarray 数组，把每一个对象转成 json 对象
+//                                    System.out.println(job.get("name")+"=") ;  // 得到 每个对象中的属性值
+//                                    Log.d("body", job.getString("body"));
+                                    ContentItem tmp=new ContentItem(job.getString("answer_text"),job.getString("answer_vote")+" 人赞成","作者："+job.getString("author_name"),
+                                            job.getInt("id"));
+                                    Log.d("title",tmp.getTitle());
+                                    Log.d("attend_num",tmp.getAttend_num());
+                                    Log.d("answer_num",tmp.getAnswer_num());
+                                    data.add(tmp);
+                                    Log.d("data_size2",""+data.size());
+                                }
+                            }
+                            Collections.shuffle(data);
+                            contacts_list.setAdapter(content_adapter);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }else {
+                        Log.d("Response errorBody", response.toString());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Throwable t) {
+                    Log.d("connect:", "failure");
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
-
-
-
-
-    //获取数据的函数，具体修改其中的json赋值
-//    private void update_Info() {
-//        // 获取登陆后本地token
-//        SharedPreferences sp = getSharedPreferences("loginToken", 0);
-//        final String token = sp.getString("token", null);
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(Request_Interface.ENDPOINT)
-//                .addConverterFactory(ScalarsConverterFactory.create())
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//
-//        final Request_Interface request_interface = retrofit.create(Request_Interface.class);
-//
-//        try {
-//            // GET 方法调用
-//            Call call = request_interface.getQuestionsinID("1");
-//            call.enqueue(new Callback() {
-//                @Override
-//                public void onResponse(Call call, Response response) {
-//                    if (response.isSuccessful()) {
-//                        String responseBodyString = response.body().toString();
-//                        Log.d("Response body", responseBodyString);
-//                        try {
-//                            JSONObject json = new JSONObject(responseBodyString);
-//                            question = new Question();
-//                            question.quesID = Integer.parseInt(json.get("id").toString());
-//                            question.  = Boolean.parseBoolean(json.get("anonymous").toString());
-//                            question.title = json.get("title").toString();
-//                            question.quesDescription = json.get("body").toString();
-//                            question.answer_number = Integer.parseInt(json.get("answers_count").toString());
-//                            question.follow_number = Integer.parseInt(json.get("flows").toString());
-//                            question.topic_tag = new Topic();
-//                            question.topic_tag.text = json.get("topic_name").toString();
-//                            if (question.answer_number != 0) {
-//                                getAnswer(json);
-//                                Message msg = new Message();
-//                                msg.what = 1;
-//                                handler.sendMessage(msg);
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }else {
-//                        Log.d("Response errorBody", response.toString());
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Call call, Throwable t) {
-//                    Log.d("connect:", "failure");
-//                }
-//            });
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
 
 
 
@@ -256,22 +282,7 @@ public class collect extends Fragment {
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     /**
      * This interface must be implemented by activities that contain this

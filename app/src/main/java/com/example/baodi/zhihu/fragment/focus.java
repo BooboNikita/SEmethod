@@ -5,15 +5,14 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.baodi.zhihu.R;
@@ -51,6 +50,7 @@ public class focus extends Fragment {
     private Question question;
     private BaseAdapter adapter;
     Handler handler;
+    private ImageView back;
 
 
     private JSONObject String2Json(String str) {
@@ -102,18 +102,16 @@ public class focus extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_focus, container, false);
-        questionList = new ArrayList<>();
-        questionID_list = new ArrayList<>();
-        SharedPreferences sp = getActivity().getSharedPreferences("loginToken", 0);
-//        final String token = sp.getString("token", null);
-        final String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6ImJhb2RpIiwiZXhwIjoxNTQ1NzA2NjIwLCJlbWFpbCI6IiJ9.kD729UXByGTD5-nhQ7zoSahNRhOform4VsXE9dNsllU";
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Request_Interface.ENDPOINT)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        final Request_Interface request_interface = retrofit.create(Request_Interface.class);
+        View view = inflater.inflate(R.layout.fragment_focus, container, false);
+        back = (ImageView) view.findViewById(R.id.my_focus_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().popBackStack();
+//                getFragmentManager().beginTransaction().hide(collect.this).add(R.id.content_layout,new MyFragment()).commit();
+                Log.d("bye","bye");
+            }
+        });
 
         //        handler = new Handler() {
 //            @Override
@@ -249,22 +247,6 @@ public class focus extends Fragment {
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     /**
      * This interface must be implemented by activities that contain this

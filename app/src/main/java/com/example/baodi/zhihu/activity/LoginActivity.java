@@ -386,6 +386,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         res = String2Json(responseBodyString).getString("username");
                         Log.d("res",res);
                         if(res.equals(mEmail)){
+                            editor.putString("username",res);
+                            editor.commit();
                             return true;
                         }else {
                             return false;

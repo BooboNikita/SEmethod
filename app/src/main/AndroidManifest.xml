@@ -49,8 +49,8 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".activity.answerPage"
-            android:launchMode="singleTop"
             android:exported="true"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.commentPage" />
         <activity
@@ -64,6 +64,11 @@
             android:name=".ui.indexpage.my_acitvity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".profile.ProfileActivity"
+            android:theme="@style/NoActionBar"
+            android:exported="true" />
     </application>
 
 </manifest>

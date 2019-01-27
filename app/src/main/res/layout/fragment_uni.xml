@@ -9,6 +9,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="650dp"
-        android:src="@mipmap/university"/>
+        android:scaleType="centerCrop"
+        android:src="@mipmap/university1"/>
 
 </FrameLayout>

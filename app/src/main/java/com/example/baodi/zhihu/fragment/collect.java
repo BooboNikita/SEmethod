@@ -202,7 +202,7 @@ public class collect extends Fragment {
                                     Log.d("data_size2",""+data.size());
                                 }
                             }
-                            Collections.shuffle(data);
+//                            Collections.shuffle(data);
                             contacts_list.setAdapter(content_adapter);
                         } catch (JSONException e) {
                             e.printStackTrace();
